@@ -1,5 +1,5 @@
-import type { ILobbyRepository } from '../domain/repositories/ILobbyRepository.js';
-import type { LobbyBroadcaster } from '../infrastructure/sse/LobbyBroadcaster.js';
+import type { ILobbyRepository } from '../../domain/repositories/ILobbyRepository.js';
+import type { LobbyBroadcaster } from '../../infrastructure/sse/LobbyBroadcaster.js';
 import {
     AlreadyInLobbyError,
     LobbyFullError,

@@ -63,7 +63,7 @@ export class LedgerEntryFactory {
             sessionId,
             isCredit: () => false,
             isDebit: () => true,
-            toJSON: () => ({}),
+            toJSON: () => ({}) as any,
         };
     }
 
@@ -82,7 +82,7 @@ export class LedgerEntryFactory {
             sessionId,
             isCredit: () => true,
             isDebit: () => false,
-            toJSON: () => ({}),
+            toJSON: () => ({}) as any,
         };
     }
 
@@ -101,7 +101,7 @@ export class LedgerEntryFactory {
             sessionId,
             isCredit: () => true,
             isDebit: () => false,
-            toJSON: () => ({}),
+            toJSON: () => ({}) as any,
         };
     }
 
@@ -120,7 +120,7 @@ export class LedgerEntryFactory {
             sessionId,
             isCredit: () => false,
             isDebit: () => true,
-            toJSON: () => ({}),
+            toJSON: () => ({}) as any,
         };
     }
 
@@ -139,7 +139,7 @@ export class LedgerEntryFactory {
             sessionId,
             isCredit: () => false,
             isDebit: () => true,
-            toJSON: () => ({}),
+            toJSON: () => ({}) as any,
         };
     }
 }

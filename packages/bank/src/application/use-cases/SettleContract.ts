@@ -1,7 +1,7 @@
-import type { IUserRepository } from '../domain/repositories/IUserRepository.js';
-import type { IContractRepository } from '../domain/repositories/IContractRepository.js';
-import type { ISessionRepository } from '../domain/repositories/ISessionRepository.js';
-import type { ILedgerRepository } from '../domain/repositories/ILedgerRepository.js';
+import type { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import type { IContractRepository } from '../../domain/repositories/IContractRepository.js';
+import type { ISessionRepository } from '../../domain/repositories/ISessionRepository.js';
+import type { ILedgerRepository } from '../../domain/repositories/ILedgerRepository.js';
 import type { SettleContractResult, PlayerResult, SessionTokenPayload } from '@pluto/shared';
 import {
     SessionNotFoundError,
@@ -54,7 +54,7 @@ export class SettleContractUseCase {
         }
 
         // 4. Validate results
-        const sessionPlayerIds = session.players.map(p => p.userId);
+        const sessionPlayerIds = session.players.map((p: any) => p.userId);
         const resultPlayerIds = input.results.map(r => r.playerId);
 
         // Check all session players are accounted for

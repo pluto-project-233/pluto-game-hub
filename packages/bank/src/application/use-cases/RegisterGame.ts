@@ -1,4 +1,4 @@
-import type { IContractRepository } from '../domain/repositories/IContractRepository.js';
+import type { IContractRepository } from '../../domain/repositories/IContractRepository.js';
 import { generateSecureToken } from '@pluto/shared';
 import crypto from 'node:crypto';
 

@@ -1,6 +1,6 @@
-import type { IUserRepository } from '../domain/repositories/IUserRepository.js';
-import type { ISessionRepository } from '../domain/repositories/ISessionRepository.js';
-import type { ILedgerRepository } from '../domain/repositories/ILedgerRepository.js';
+import type { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import type { ISessionRepository } from '../../domain/repositories/ISessionRepository.js';
+import type { ILedgerRepository } from '../../domain/repositories/ILedgerRepository.js';
 import type { SessionTokenPayload } from '@pluto/shared';
 import {
     SessionNotFoundError,
@@ -53,7 +53,7 @@ export class CancelContractUseCase {
 
         // 4. Refund all players
         const users = await this.userRepository.findByIds(
-            session.players.map(p => p.userId)
+            session.players.map((p: any) => p.userId)
         );
         const ledgerEntries = [];
         const refundedPlayers = [];

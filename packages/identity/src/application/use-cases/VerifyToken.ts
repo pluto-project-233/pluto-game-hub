@@ -1,4 +1,4 @@
-import type { FirebaseAuthProvider, DecodedToken } from '../infrastructure/firebase/FirebaseAuthProvider.js';
+import type { FirebaseAuthProvider, DecodedToken } from '../../infrastructure/firebase/FirebaseAuthProvider.js';
 import { InvalidTokenError } from '@pluto/shared';
 
 export interface VerifyTokenInput {

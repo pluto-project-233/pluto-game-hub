@@ -1,4 +1,4 @@
-import type { IDiceGameRepository } from '../domain/repositories/IDiceGameRepository.js';
+import type { IDiceGameRepository } from '../../domain/repositories/IDiceGameRepository.js';
 import { NotFoundError, ValidationError } from '@pluto/shared';
 
 export interface RollDiceInput {
@@ -61,7 +61,7 @@ export class RollDiceUseCase {
 
             // Trigger callback if provided (to settle the contract)
             if (this.onGameComplete) {
-                await this.onGameComplete(game.id, result.winners);
+                await this.onGameComplete(game.id, result.winners!);
             }
         }
 

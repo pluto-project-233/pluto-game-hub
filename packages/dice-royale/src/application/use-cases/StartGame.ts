@@ -1,5 +1,5 @@
-import type { IDiceGameRepository } from '../domain/repositories/IDiceGameRepository.js';
-import type { DiceGame } from '../domain/entities/DiceGame.js';
+import type { IDiceGameRepository } from '../../domain/repositories/IDiceGameRepository.js';
+import type { DiceGame } from '../../domain/entities/DiceGame.js';
 
 export interface StartGameInput {
     sessionId: string;

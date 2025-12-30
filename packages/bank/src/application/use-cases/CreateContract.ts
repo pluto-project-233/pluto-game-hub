@@ -1,4 +1,4 @@
-import type { IContractRepository } from '../domain/repositories/IContractRepository.js';
+import type { IContractRepository } from '../../domain/repositories/IContractRepository.js';
 import { NotFoundError, ValidationError } from '@pluto/shared';
 
 export interface CreateContractInput {

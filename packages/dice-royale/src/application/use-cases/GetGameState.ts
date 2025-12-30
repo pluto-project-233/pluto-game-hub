@@ -1,4 +1,4 @@
-import type { IDiceGameRepository } from '../domain/repositories/IDiceGameRepository.js';
+import type { IDiceGameRepository } from '../../domain/repositories/IDiceGameRepository.js';
 import type { DiceRoyaleState } from '@pluto/shared';
 import { NotFoundError } from '@pluto/shared';
 
@@ -34,7 +34,7 @@ export class GetGameStateUseCase {
             gameId: game.id,
             sessionId: game.sessionId,
             status: game.status,
-            players: game.players.map(p => ({
+            players: game.players.map((p: any) => ({
                 userId: p.userId,
                 displayName: p.displayName,
                 hasRolled: p.hasRolled,

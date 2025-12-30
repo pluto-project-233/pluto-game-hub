@@ -1,4 +1,4 @@
-import type { IUserRepository } from '../domain/repositories/IUserRepository.js';
+import type { IUserRepository } from '../../domain/repositories/IUserRepository.js';
 import type { UserBalance } from '@pluto/shared';
 import { UserNotFoundError } from '@pluto/shared';
 

@@ -1,4 +1,4 @@
-import type { ILedgerRepository } from '../domain/repositories/ILedgerRepository.js';
+import type { ILedgerRepository } from '../../domain/repositories/ILedgerRepository.js';
 import type { PaginatedResult, LedgerHistoryItem } from '@pluto/shared';
 
 export interface GetHistoryInput {
@@ -32,7 +32,7 @@ export class GetHistoryUseCase {
         );
 
         return {
-            data: result.data.map(entry => ({
+            data: result.data.map((entry: any) => ({
                 id: entry.id,
                 type: entry.type,
                 amount: entry.amount,

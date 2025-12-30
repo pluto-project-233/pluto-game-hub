@@ -1,4 +1,4 @@
-import type { ILobbyRepository } from '../domain/repositories/ILobbyRepository.js';
+import type { ILobbyRepository } from '../../domain/repositories/ILobbyRepository.js';
 import type { LobbyDetails } from '@pluto/shared';
 import { LobbyNotFoundError } from '@pluto/shared';
 
@@ -29,7 +29,7 @@ export class GetLobbyStatusUseCase {
             minPlayers: lobby.minPlayers,
             maxPlayers: lobby.maxPlayers,
             createdAt: lobby.createdAt,
-            players: lobby.players.map(p => ({
+            players: lobby.players.map((p: any) => ({
                 id: p.userId,
                 displayName: p.displayName,
                 joinedAt: p.joinedAt,

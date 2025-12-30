@@ -1,4 +1,4 @@
-import type { ILobbyRepository } from '../domain/repositories/ILobbyRepository.js';
+import type { ILobbyRepository } from '../../domain/repositories/ILobbyRepository.js';
 import type { LobbyInfo } from '@pluto/shared';
 
 export interface GetLobbiesInput {
@@ -16,7 +16,7 @@ export class GetLobbiesUseCase {
             ? await this.lobbyRepository.findByContractId(input.contractId, 'WAITING')
             : await this.lobbyRepository.findWaitingLobbies();
 
-        return lobbies.map(lobby => ({
+        return lobbies.map((lobby: any) => ({
             id: lobby.id,
             contractId: lobby.contractId,
             contractName: lobby.contractName,

@@ -1,7 +1,7 @@
-import type { IUserRepository } from '../domain/repositories/IUserRepository.js';
-import type { IContractRepository } from '../domain/repositories/IContractRepository.js';
-import type { ISessionRepository } from '../domain/repositories/ISessionRepository.js';
-import type { ILedgerRepository } from '../domain/repositories/ILedgerRepository.js';
+import type { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import type { IContractRepository } from '../../domain/repositories/IContractRepository.js';
+import type { ISessionRepository } from '../../domain/repositories/ISessionRepository.js';
+import type { ILedgerRepository } from '../../domain/repositories/ILedgerRepository.js';
 import type { ExecuteContractResult } from '@pluto/shared';
 import {
     ContractNotFoundError,
@@ -56,7 +56,7 @@ export class ExecuteContractUseCase {
         // 3. Find all users
         const users = await this.userRepository.findByFirebaseUids(input.playerFirebaseUids);
         if (users.length !== playerCount) {
-            const foundUids = users.map(u => u.firebaseUid);
+            const foundUids = users.map((u: any) => u.firebaseUid);
             const missingUids = input.playerFirebaseUids.filter(uid => !foundUids.includes(uid));
             throw new ValidationError(`Users not found: ${missingUids.join(', ')}`);
         }
@@ -78,7 +78,7 @@ export class ExecuteContractUseCase {
             contractId: contract.id,
             totalPot,
             expiresAt,
-            players: users.map(user => ({
+            players: users.map((user: any) => ({
                 userId: user.id,
                 displayName: user.displayName,
                 amountLocked: entryFee,
@@ -110,7 +110,7 @@ export class ExecuteContractUseCase {
         const sessionToken = this.generateSessionToken({
             sessionId: session.id,
             contractId: contract.id,
-            playerIds: users.map(u => u.id),
+            playerIds: users.map((u: any) => u.id),
             totalPot: totalPot.toString(),
             expiresAt: expiresAt.toISOString(),
         });
@@ -118,7 +118,7 @@ export class ExecuteContractUseCase {
         return {
             sessionId: session.id,
             sessionToken,
-            players: session.players.map(p => ({
+            players: session.players.map((p: any) => ({
                 id: p.userId,
                 displayName: p.displayName,
                 amountLocked: p.amountLocked,
