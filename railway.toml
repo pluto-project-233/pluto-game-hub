@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install && npm run db:generate"
+buildCommand = "npm install && npm run db:generate && npm run build"
 
 [deploy]
 startCommand = "npm start"
