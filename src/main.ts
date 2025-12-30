@@ -167,7 +167,7 @@ async function main() {
     };
 
     // Register all service routes under /v1 prefix
-    gateway.registerRoutes('/v1', (instance, cache) => {
+    gateway.registerRoutes('/v1', (instance: any, cache: any) => {
         // Bank routes
         registerBankRoutes(instance, cache, {
             prisma,
