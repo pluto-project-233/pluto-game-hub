@@ -106,7 +106,7 @@ npm run db:studio
 3. Connect your GitHub repository
 4. Set environment variables:
    - `DATABASE_URL` (from PostgreSQL plugin)
-   - `FIREBASE_SERVICE_ACCOUNT_PATH=./devops/firebase.json`
+   - `FIREBASE_SERVICE_ACCOUNT=<content-of-your-firebase-json>`
    - `JWT_SECRET=<your-secret>`
    - `HMAC_SECRET=<your-secret>`
 

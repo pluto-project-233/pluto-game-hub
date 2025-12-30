@@ -33,3 +33,6 @@ coverage/
 # Temp files
 tmp/
 temp/
+
+# Firebase
+devops/firebase.json

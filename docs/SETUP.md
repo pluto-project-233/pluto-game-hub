@@ -46,7 +46,7 @@ cp .env.example .env
 
 # Edit .env with these values:
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/pluto_dev"
-FIREBASE_SERVICE_ACCOUNT_PATH="./devops/firebase.json"
+FIREBASE_SERVICE_ACCOUNT='{"type": "service_account", ...}'
 JWT_SECRET="3e608adbbb03867e71c64f3da2fd04ba4a5d591787679759d1f3625850b9e03b"
 HMAC_SECRET="7a230607a59155c1a90da1669c716527a8ad02d94f67d92565f7d47a1ed53dc4"
 ```
@@ -90,7 +90,7 @@ In Railway dashboard, add these variables:
 DATABASE_URL=${{Postgres.DATABASE_URL}}
 
 # Firebase
-FIREBASE_SERVICE_ACCOUNT_PATH=./devops/firebase.json
+FIREBASE_SERVICE_ACCOUNT='{"type": "service_account", ...}'
 
 # Server
 NODE_ENV=production

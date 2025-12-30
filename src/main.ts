@@ -19,6 +19,7 @@ const config = {
     host: process.env.HOST || '0.0.0.0',
     nodeEnv: process.env.NODE_ENV || 'development',
     databaseUrl: process.env.DATABASE_URL!,
+    firebaseServiceAccount: process.env.FIREBASE_SERVICE_ACCOUNT,
     firebaseServiceAccountPath: process.env.FIREBASE_SERVICE_ACCOUNT_PATH || './devops/firebase.json',
     jwtSecret: process.env.JWT_SECRET || 'development-jwt-secret',
     hmacSecret: process.env.HMAC_SECRET || 'development-hmac-secret',
@@ -34,8 +35,19 @@ const prisma = new PrismaClient({
 });
 
 // Firebase Admin
-const serviceAccountPath = resolve(process.cwd(), config.firebaseServiceAccountPath);
-const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
+let serviceAccount;
+if (config.firebaseServiceAccount) {
+    try {
+        serviceAccount = JSON.parse(config.firebaseServiceAccount);
+    } catch (error) {
+        console.error('❌ Failed to parse FIREBASE_SERVICE_ACCOUNT env var as JSON');
+        throw error;
+    }
+} else {
+    const serviceAccountPath = resolve(process.cwd(), config.firebaseServiceAccountPath);
+    serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf-8'));
+}
+
 const firebaseApp = initializeApp({
     credential: cert(serviceAccount),
 });

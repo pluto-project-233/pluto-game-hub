@@ -93,7 +93,7 @@ git push origin main
 ### 4. Set Environment Variables
 In Railway dashboard, add:
 ```
-FIREBASE_SERVICE_ACCOUNT_PATH=./devops/firebase.json
+FIREBASE_SERVICE_ACCOUNT=<content-of-your-firebase-json>
 NODE_ENV=production
 JWT_SECRET=<generate-with-openssl-rand-hex-32>
 HMAC_SECRET=<generate-with-openssl-rand-hex-32>
