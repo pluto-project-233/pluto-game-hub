@@ -1,0 +1,87 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "lib": [
+            "ES2022"
+        ],
+        "outDir": "./dist",
+        "rootDir": ".",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "composite": true,
+        "incremental": true,
+        "paths": {
+            "@pluto/shared": [
+                "./packages/shared/src"
+            ],
+            "@pluto/shared/*": [
+                "./packages/shared/src/*"
+            ],
+            "@pluto/gateway": [
+                "./packages/gateway/src"
+            ],
+            "@pluto/gateway/*": [
+                "./packages/gateway/src/*"
+            ],
+            "@pluto/bank": [
+                "./packages/bank/src"
+            ],
+            "@pluto/bank/*": [
+                "./packages/bank/src/*"
+            ],
+            "@pluto/lobby": [
+                "./packages/lobby/src"
+            ],
+            "@pluto/lobby/*": [
+                "./packages/lobby/src/*"
+            ],
+            "@pluto/identity": [
+                "./packages/identity/src"
+            ],
+            "@pluto/identity/*": [
+                "./packages/identity/src/*"
+            ],
+            "@pluto/dice-royale": [
+                "./packages/dice-royale/src"
+            ],
+            "@pluto/dice-royale/*": [
+                "./packages/dice-royale/src/*"
+            ]
+        }
+    },
+    "references": [
+        {
+            "path": "./packages/shared"
+        },
+        {
+            "path": "./packages/gateway"
+        },
+        {
+            "path": "./packages/bank"
+        },
+        {
+            "path": "./packages/lobby"
+        },
+        {
+            "path": "./packages/identity"
+        },
+        {
+            "path": "./packages/dice-royale"
+        }
+    ],
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

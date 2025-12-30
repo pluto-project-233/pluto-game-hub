@@ -1,0 +1,429 @@
+{
+    "info": {
+        "name": "Pluto Hub API",
+        "description": "Complete API collection for Pluto Hub - Bank and Identity layer for game backends",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000/v1"
+        },
+        {
+            "key": "firebaseToken",
+            "value": ""
+        },
+        {
+            "key": "gameId",
+            "value": ""
+        },
+        {
+            "key": "clientSecret",
+            "value": ""
+        },
+        {
+            "key": "sessionToken",
+            "value": ""
+        }
+    ],
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{firebaseToken}}",
+                "type": "string"
+            }
+        ]
+    },
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/../health"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Player - Identity",
+            "item": [
+                {
+                    "name": "Get Profile",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/me/profile",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Balance",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/me/balance",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get History",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/me/history?limit=20&offset=0",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "me",
+                                "history"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "20"
+                                },
+                                {
+                                    "key": "offset",
+                                    "value": "0"
+                                }
+                            ]
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Set Display Name",
+                    "request": {
+                        "method": "PUT",
+                        "url": "{{baseUrl}}/me/display-name",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"displayName\": \"CoolPlayer123\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Check Display Name Availability",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{baseUrl}}/display-name/check?name=CoolPlayer123",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "display-name",
+                                "check"
+                            ],
+                            "query": [
+                                {
+                                    "key": "name",
+                                    "value": "CoolPlayer123"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Player - Lobby",
+            "item": [
+                {
+                    "name": "List Lobbies",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/lobbies"
+                    }
+                },
+                {
+                    "name": "Get Lobby Status",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/lobbies/:lobbyId/status"
+                    }
+                },
+                {
+                    "name": "Join Lobby",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/lobby/join",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"contractId\": \"your-contract-id\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Leave Lobby",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/lobby/leave",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Game Backend - Contracts",
+            "item": [
+                {
+                    "name": "Execute Contract",
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const body = pm.request.body.raw;",
+                                    "const secret = pm.collectionVariables.get('clientSecret');",
+                                    "const signature = CryptoJS.HmacSHA256(body, secret).toString(CryptoJS.enc.Hex);",
+                                    "pm.request.headers.add({ key: 'X-Pluto-Signature', value: signature });"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/contracts/execute",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Game-Id",
+                                "value": "{{gameId}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"contractId\": \"your-contract-id\",\n  \"playerIds\": [\"firebase-uid-1\", \"firebase-uid-2\"]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Settle Contract",
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const body = pm.request.body.raw;",
+                                    "const secret = pm.collectionVariables.get('clientSecret');",
+                                    "const signature = CryptoJS.HmacSHA256(body, secret).toString(CryptoJS.enc.Hex);",
+                                    "pm.request.headers.add({ key: 'X-Pluto-Signature', value: signature });"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/contracts/settle",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Game-Id",
+                                "value": "{{gameId}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"results\": [\n    { \"playerId\": \"player-1-id\", \"isWinner\": true },\n    { \"playerId\": \"player-2-id\", \"isWinner\": false }\n  ]\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Cancel Contract",
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const body = pm.request.body.raw;",
+                                    "const secret = pm.collectionVariables.get('clientSecret');",
+                                    "const signature = CryptoJS.HmacSHA256(body, secret).toString(CryptoJS.enc.Hex);",
+                                    "pm.request.headers.add({ key: 'X-Pluto-Signature', value: signature });"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/contracts/cancel",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-Game-Id",
+                                "value": "{{gameId}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"sessionToken\": \"{{sessionToken}}\",\n  \"reason\": \"Game failed to start\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Admin - Dev",
+            "item": [
+                {
+                    "name": "Register Game",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "const response = pm.response.json();",
+                                    "if (response.id) {",
+                                    "  pm.collectionVariables.set('gameId', response.id);",
+                                    "}",
+                                    "if (response.clientSecret) {",
+                                    "  pm.collectionVariables.set('clientSecret', response.clientSecret);",
+                                    "  console.log('⚠️ SAVE THIS CLIENT SECRET:', response.clientSecret);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/dev/games",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"DiceRoyale\",\n  \"description\": \"Simple dice game - highest roll wins\",\n  \"callbackUrl\": \"https://example.com/webhook\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Create Contract",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/dev/contracts",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"gameId\": \"{{gameId}}\",\n  \"name\": \"Quick Match\",\n  \"entryFee\": \"100\",\n  \"platformFee\": 5,\n  \"minPlayers\": 2,\n  \"maxPlayers\": 4,\n  \"ttlSeconds\": 3600\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "DiceRoyale Game",
+            "item": [
+                {
+                    "name": "Get Game State",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/dice-royale/:sessionId/state"
+                    }
+                },
+                {
+                    "name": "Roll Dice",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/dice-royale/:gameId/roll",
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{firebaseToken}}"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
