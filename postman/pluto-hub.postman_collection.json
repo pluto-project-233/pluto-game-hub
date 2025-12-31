@@ -7,7 +7,11 @@
     "variable": [
         {
             "key": "baseUrl",
-            "value": "http://localhost:3000/v1"
+            "value": "https://pluto-game-hub-production.up.railway.app/v1"
+        },
+        {
+            "key": "x-pluto-header",
+            "value": ""
         },
         {
             "key": "firebaseToken",

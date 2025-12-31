@@ -11,19 +11,32 @@ datasource db {
 // IDENTITY SERVICE
 // ============================================
 
+enum UserRole {
+  PLAYER
+  ADMIN
+}
+
 model User {
   id                String   @id @default(uuid())
   firebaseUid       String   @unique
   uniqueDisplayName String   @unique
   balance           BigInt   @default(0)
   lockedBalance     BigInt   @default(0)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  role              UserRole @default(PLAYER)
+
+  // Developer-specific fields
+  developerId      String?          @unique
+  developerBalance BigInt           @default(0)
+  developerStatus  DeveloperStatus?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relations
-  ledgerEntries LedgerEntry[]
-  lobbyPlayers  LobbyPlayer[]
-  gameSessions  GameSessionPlayer[]
+  ledgerEntries        LedgerEntry[]
+  lobbyPlayers         LobbyPlayer[]
+  gameSessions         GameSessionPlayer[]
+  developerApplication DeveloperApplication? @relation(fields: [developerId], references: [id])
 }
 
 // ============================================
@@ -34,7 +47,7 @@ model Game {
   id           String   @id @default(uuid())
   name         String   @unique
   description  String?
-  clientSecret String   // Hashed HMAC secret
+  clientSecret String // Hashed HMAC secret
   callbackUrl  String?
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -48,8 +61,8 @@ model Contract {
   id          String   @id @default(uuid())
   gameId      String
   name        String
-  entryFee    BigInt   // Amount locked per player
-  platformFee Int      // Percentage (e.g., 5 = 5%)
+  entryFee    BigInt // Amount locked per player
+  platformFee Int // Percentage (e.g., 5 = 5%)
   minPlayers  Int
   maxPlayers  Int
   ttlSeconds  Int      @default(3600) // Session timeout
@@ -66,24 +79,24 @@ model Contract {
 }
 
 enum LedgerEntryType {
-  DEPOSIT    // External funds added
-  WITHDRAW   // External funds removed
-  LOCK       // Funds locked for game
-  UNLOCK     // Funds released (cancel)
-  WIN        // Winnings added
-  LOSE       // Entry fee deducted
-  FEE        // Platform fee deducted
+  DEPOSIT // External funds added
+  WITHDRAW // External funds removed
+  LOCK // Funds locked for game
+  UNLOCK // Funds released (cancel)
+  WIN // Winnings added
+  LOSE // Entry fee deducted
+  FEE // Platform fee deducted
 }
 
 model LedgerEntry {
-  id          String          @id @default(uuid())
-  userId      String
-  type        LedgerEntryType
-  amount      BigInt          // Always positive
-  balanceAfter BigInt         // Snapshot after transaction
-  description String?
-  sessionId   String?         // Reference to game session
-  createdAt   DateTime        @default(now())
+  id           String          @id @default(uuid())
+  userId       String
+  type         LedgerEntryType
+  amount       BigInt // Always positive
+  balanceAfter BigInt // Snapshot after transaction
+  description  String?
+  sessionId    String? // Reference to game session
+  createdAt    DateTime        @default(now())
 
   // Relations
   user    User         @relation(fields: [userId], references: [id])
@@ -93,13 +106,13 @@ model LedgerEntry {
 }
 
 model GameSession {
-  id          String            @id @default(uuid())
-  contractId  String
-  status      GameSessionStatus @default(PENDING)
-  totalPot    BigInt            @default(0) // Total locked funds
-  expiresAt   DateTime          // TTL for auto-cancel
-  createdAt   DateTime          @default(now())
-  settledAt   DateTime?
+  id         String            @id @default(uuid())
+  contractId String
+  status     GameSessionStatus @default(PENDING)
+  totalPot   BigInt            @default(0) // Total locked funds
+  expiresAt  DateTime // TTL for auto-cancel
+  createdAt  DateTime          @default(now())
+  settledAt  DateTime?
 
   // Relations
   contract      Contract            @relation(fields: [contractId], references: [id])
@@ -110,20 +123,20 @@ model GameSession {
 }
 
 enum GameSessionStatus {
-  PENDING   // Created, awaiting game start
-  ACTIVE    // Game in progress
-  SETTLED   // Rewards distributed
+  PENDING // Created, awaiting game start
+  ACTIVE // Game in progress
+  SETTLED // Rewards distributed
   CANCELLED // Funds returned
-  EXPIRED   // TTL exceeded, auto-cancelled
+  EXPIRED // TTL exceeded, auto-cancelled
 }
 
 model GameSessionPlayer {
-  id        String  @id @default(uuid())
-  sessionId String
-  userId    String
+  id           String  @id @default(uuid())
+  sessionId    String
+  userId       String
   amountLocked BigInt
-  isWinner  Boolean @default(false)
-  winAmount BigInt  @default(0)
+  isWinner     Boolean @default(false)
+  winAmount    BigInt  @default(0)
 
   // Relations
   session GameSession @relation(fields: [sessionId], references: [id])
@@ -137,10 +150,10 @@ model GameSessionPlayer {
 // ============================================
 
 enum LobbyStatus {
-  WAITING   // Accepting players
-  STARTING  // Min players reached, countdown
-  IN_GAME   // Game session created
-  CLOSED    // Lobby completed or cancelled
+  WAITING // Accepting players
+  STARTING // Min players reached, countdown
+  IN_GAME // Game session created
+  CLOSED // Lobby completed or cancelled
 }
 
 model Lobby {
@@ -176,29 +189,67 @@ model LobbyPlayer {
 // ============================================
 
 model DiceRoyaleGame {
-  id        String               @id @default(uuid())
-  sessionId String               @unique // Links to GameSession
-  status    DiceRoyaleStatus     @default(ROLLING)
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
+  id        String           @id @default(uuid())
+  sessionId String           @unique // Links to GameSession
+  status    DiceRoyaleStatus @default(ROLLING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 
   // Relations
   rolls DiceRoyaleRoll[]
 }
 
 enum DiceRoyaleStatus {
-  ROLLING   // Players submitting rolls
-  COMPLETE  // All rolls in, winner determined
+  ROLLING // Players submitting rolls
+  COMPLETE // All rolls in, winner determined
 }
 
 model DiceRoyaleRoll {
-  id       String @id @default(uuid())
-  gameId   String
-  userId   String
-  rollValue Int   // 1-6
+  id        String @id @default(uuid())
+  gameId    String
+  userId    String
+  rollValue Int // 1-6
 
   // Relations
   game DiceRoyaleGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
 
   @@unique([gameId, userId])
+}
+
+// ============================================
+// DEVELOPER APPLICATIONS
+// ============================================
+
+enum DeveloperStatus {
+  ACTIVE
+  BLOCKED
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  REVIEWED
+  APPROVED
+  REJECTED
+}
+
+model DeveloperApplication {
+  id           String            @id @default(uuid())
+  userId       String            @unique
+  email        String
+  companyName  String
+  website      String?
+  description  String
+  gamesPlanned String
+  status       ApplicationStatus @default(SUBMITTED)
+  submittedAt  DateTime          @default(now())
+  reviewedAt   DateTime?
+  reviewedBy   String?
+  reviewNotes  String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  // Relations
+  user User?
+
+  @@index([status])
 }
